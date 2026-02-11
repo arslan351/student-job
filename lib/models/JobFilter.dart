@@ -1,10 +1,10 @@
 
-class Job{
+class JobFilter{
   bool isClicked;
   final String svgPath;
   final String title;
 
-  Job({
+  JobFilter({
     this.isClicked = false,
     required this. svgPath,
     required this. title,

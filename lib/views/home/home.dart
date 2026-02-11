@@ -3,9 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:student_jobs/models/JobDetails.dart';
 import 'package:student_jobs/views/home/widgets/job_type/job_type.dart';
 import 'package:student_jobs/views/home/widgets/card/card.dart';
-import 'package:student_jobs/models/Job.dart';
+import 'package:student_jobs/models/JobFilter.dart';
 import 'package:student_jobs/models/Card.dart';
 import 'package:student_jobs/views/home/widgets/job_type/JobDetailsBottomSheet.dart';
+import 'package:student_jobs/models/Action.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,31 +16,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Job> jobTypes = [];
+  List<JobFilter> jobTypes = [];
   List<CardDto> cardsDto = [];
+  List<JobdetailsModel> jobsDetails = [];
+  List<String> qualifications = [];
+
+  List<ActionsDto>actions =[];
 
   @override
   void initState() {
     super.initState();
 
     jobTypes = [
-      Job(isClicked: true, svgPath: "assets/icons/bolt.svg", title: "For You"),
-      Job(isClicked: false, svgPath: "assets/icons/monitor.svg", title: "IT"),
-      Job(
-        isClicked: false,
-        svgPath: "assets/icons/call-calling.svg",
-        title: "Support",
-      ),
-      Job(
-        isClicked: false,
-        svgPath: "assets/icons/chart.svg",
-        title: "Marketing",
-      ),
-      Job(
-        isClicked: false,
-        svgPath: "assets/icons/shopping-bag.svg",
-        title: "Commerce",
-      ),
+      JobFilter(isClicked: true, svgPath: "assets/icons/bolt.svg", title: "For You"),
+      JobFilter(isClicked: false, svgPath: "assets/icons/monitor.svg", title: "IT"),
+      JobFilter(isClicked: false,svgPath: "assets/icons/call-calling.svg",title: "Support",),
+      JobFilter(isClicked: false,svgPath: "assets/icons/chart.svg",title: "Marketing",),
+      JobFilter(isClicked: false,svgPath: "assets/icons/shopping-bag.svg",title: "Commerce",),
     ];
 
     cardsDto = [
@@ -63,6 +56,18 @@ class _HomeScreenState extends State<HomeScreen> {
         deadline: "Deadline : ",
         deadLineValue: "20 Sept",
       ),
+    ];
+
+    jobsDetails = [
+      JobdetailsModel(card: cardsDto[0], qualifications: ["Minimum: Baccalauréat (high school diploma) or equivalent." , "Preferred: Degree or training in Commerce, Marketing, or related field..."]),
+      JobdetailsModel(card: cardsDto[1], qualifications: ["Minimum: Baccalauréat (high school diploma) or equivalent." , "Preferred: Degree or training in Commerce, Marketing, or related field..."]),
+    ];
+
+    actions = [
+      ActionsDto(true , "Jobs", "assets/icons/briefcase.svg"),
+      ActionsDto(false , "My Applications", "assets/icons/myapps.svg"),
+      ActionsDto(false , "My Shifts", "assets/icons/myshift.svg"),
+      ActionsDto(false , "My Profile", "assets/icons/myprofile.svg"),
     ];
   }
 
@@ -358,32 +363,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   spacing: 16,
-                  children: cardsDto.asMap().entries.map((entry){
-                    final index = entry.key;
-                    final card = entry.value;
-                    return CardJob(
-                        assetLogo: card.logoPath ,
-                        title: card.title,
-                        location: card.location,
-                        salary: card.salary,
-                        jobType: card.jobType,
-                        duration: card.duration,
-                        deadline: card.deadline,
-                        deadLineValue: card.deadLineValue,
-                        onTap :(){
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) {
-                              final qualifications= ["Minimum: Baccalauréat (high school diploma) or equivalent.","Preferred: Degree or training in Commerce, Marketing, or related field..."];
-                              final jobDetails = JobdetailsModel(card: card, qualifications: qualifications);
-                              return JobDetailsBottomSheet(jobdetails: jobDetails);
-                            },
-                          );
-                        }
-                    );
-                  }).toList(),
+                  children:
+                    jobsDetails.asMap().entries.map((jobDetailMap){
+                      final CardDto card = jobDetailMap.value.card;
+                      final List<String> qualifications = jobDetailMap.value.qualifications;
+                      return CardJob(
+                          assetLogo: card.logoPath ,
+                          title: card.title,
+                          location: card.location,
+                          salary: card.salary,
+                          jobType: card.jobType,
+                          duration: card.duration,
+                          deadline: card.deadline,
+                          deadLineValue: card.deadLineValue,
+                          onTap :(){
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) {
+                                final jobDetails = JobdetailsModel(card: card, qualifications: qualifications);
+                                return JobDetailsBottomSheet(jobdetails: jobDetails);
+                              },
+                            );
+
+                          }
+                      );
+                    }).toList(),
                 ),
               ),
             ],
@@ -395,84 +401,47 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
         elevation: 4,
         child: SizedBox(
-          height: 80, // enough height for SVG
+          height: 80,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/briefcase.svg",
-                    width: 35,
-                    fit: BoxFit.contain,
-                  ),
-                  Text(
-                    "Jobs",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      color: Color(0XFF1C9F80),
+            children: actions.asMap().entries.map((entry){
+              final int index = entry.key;
+              final ActionsDto action = entry.value ;
+
+              return GestureDetector(
+                onTap: (){
+                  setState(() {
+                    for(final action in actions){
+                      action.isClicked = false;
+                    }
+                    actions[index].isClicked = true;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      colorFilter: ColorFilter.mode(
+                        action.isClicked ? Color(0XFF1C9F80) : Color(0xB2262430),
+                        BlendMode.srcIn,
+                      ),
+                      action.pathLogo,
+                      width: 35,
+                      fit: BoxFit.contain,
                     ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/myapps.svg",
-                    width: 35,
-                    fit: BoxFit.contain,
-                  ),
-                  Text(
-                    "My Applications",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      color: Color(0xB2262430),
+                    Text(
+                      action.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: action.isClicked ? Color(0XFF1C9F80) : Color(0xB2262430),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/myshift.svg",
-                    width: 35,
-                    fit: BoxFit.contain,
-                  ),
-                  Text(
-                    "My shifts",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      color: Color(0xB2262430),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/myprofile.svg",
-                    width: 35,
-                    fit: BoxFit.contain,
-                  ),
-                  Text(
-                    "My Profile",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      color: Color(0xB2262430),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              );
+            }).toList(),
           ),
         ),
       ),
