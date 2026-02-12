@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:student_jobs/models/JobDetails.dart';
-import 'package:student_jobs/views/home/widgets/card/card.dart';
+import 'package:student_jobs/views/jobs/widgets/card/card.dart';
 import 'package:student_jobs/views/widgets/BulletText.dart';
 
 class JobDetailsBottomSheet extends StatelessWidget {
-  final JobdetailsModel jobdetails;
+  final JobdetailsModel jobDetails;
 
-  const JobDetailsBottomSheet({super.key, required this.jobdetails});
+  const JobDetailsBottomSheet({super.key, required this.jobDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +34,14 @@ class JobDetailsBottomSheet extends StatelessWidget {
             //const SizedBox(height: 16),
             // Card
             CardJob(
-              assetLogo: jobdetails.card.logoPath,
-              title: jobdetails.card.title,
-              location: jobdetails.card.location,
-              salary: jobdetails.card.salary,
-              jobType: jobdetails.card.jobType,
-              duration: jobdetails.card.duration,
-              deadline: jobdetails.card.deadline,
-              deadLineValue: jobdetails.card.deadLineValue,
+              assetLogo: jobDetails.card.logoPath,
+              title: jobDetails.card.title,
+              location: jobDetails.card.location,
+              salary: jobDetails.card.salary,
+              jobType: jobDetails.card.jobType,
+              duration: jobDetails.card.duration,
+              deadline: jobDetails.card.deadline,
+              deadLineValue: jobDetails.card.deadLineValue,
               onTap: () {},
             ),
             //const SizedBox(height: 16),
@@ -60,7 +60,7 @@ class JobDetailsBottomSheet extends StatelessWidget {
             //const SizedBox(height: 8),
             Column(
               children: [
-                ...jobdetails.qualifications.map(
+                ...jobDetails.qualifications.map(
                       (q) => Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 8),
                     child: BulletText(text: q, fontSize: 12, fontColor: 0XFF9192A3),

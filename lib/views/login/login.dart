@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:student_jobs/views/home.dart';
+import 'package:student_jobs/views/my_apps/myApps.dart';
 
 import 'widgets/phone_form.dart';
 import 'widgets/otp_form.dart';
 
-import '../home/home.dart';
+import '../jobs/jobs.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -150,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen>
                           onConfirm: (){
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder : (_)=> const HomeScreen()),
+                              MaterialPageRoute(builder : (_)=>  Home()),
                             );
                           },
                         )
