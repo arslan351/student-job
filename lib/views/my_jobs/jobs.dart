@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:student_jobs/models/JobDetails.dart';
-import 'package:student_jobs/views/jobs/widgets/job_type/job_type.dart';
-import 'package:student_jobs/views/jobs/widgets/card/card.dart';
+import 'package:student_jobs/views/my_jobs/widgets/job_type/job_type.dart';
+import 'package:student_jobs/views/my_jobs/widgets/card/card.dart';
 import 'package:student_jobs/models/JobFilter.dart';
 import 'package:student_jobs/models/Card.dart';
-import 'package:student_jobs/views/jobs/widgets/job_type/JobDetailsBottomSheet.dart';
+import 'package:student_jobs/views/my_jobs/widgets/job_type/JobDetailsBottomSheet.dart';
+import 'package:student_jobs/views/widgets/BottomSheetModel.dart';
+
 class JobsView extends StatefulWidget {
   const JobsView({super.key});
 
@@ -202,8 +204,8 @@ class _JobsView extends State<JobsView> {
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
                               builder: (context) {
-                                final jobDetails = JobdetailsModel(card: card, qualifications: qualifications);
-                                return JobDetailsBottomSheet(jobDetails: jobDetails);
+                                final jobDetails = JobdetailsModel(card: card, qualifications: qualifications,);
+                                return BottomSheetModel(child: JobDetailsBottomSheet(jobDetails: jobDetails));
                               },
                             );
 

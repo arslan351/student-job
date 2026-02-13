@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:student_jobs/models/Action.dart';
-import 'package:student_jobs/views/jobs/jobs.dart';
+import 'package:student_jobs/views/my_jobs/jobs.dart';
 import 'package:student_jobs/views/my_apps/myApps.dart';
 import 'package:student_jobs/views/my_profile/myProfile.dart';
 import 'package:student_jobs/views/my_shifts/myShifts.dart';

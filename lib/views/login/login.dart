@@ -2,12 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:student_jobs/views/home.dart';
-import 'package:student_jobs/views/my_apps/myApps.dart';
-
 import 'widgets/phone_form.dart';
 import 'widgets/otp_form.dart';
 
-import '../jobs/jobs.dart';
+import '../my_jobs/jobs.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

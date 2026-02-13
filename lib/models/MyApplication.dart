@@ -4,11 +4,12 @@ import 'package:student_jobs/models/Enums/ApplicationStatus.dart';
 
 class MyApplicationModel {
   final CardDto jobInfo;
-  //final Map<String, Object> status;
   final ApplicationStatus status;
   final DateTime appliedOn;
+  final List<String> statusList;
+  final bool profileCompletion ;
 
-  MyApplicationModel(this.jobInfo, this.status, this.appliedOn);
+  MyApplicationModel(this.jobInfo, this.status, this.appliedOn,this.profileCompletion, {required this.statusList});
 
   Map<String, Object> getStatus() {
     switch (status) {
