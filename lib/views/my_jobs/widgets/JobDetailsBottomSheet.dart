@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:student_jobs/models/JobDetails.dart';
-import 'package:student_jobs/views/my_jobs/widgets/card/card.dart';
+import 'package:student_jobs/models/JobDetailsModel.dart';
+import 'package:student_jobs/views/my_jobs/widgets/jobCard.dart';
+import 'package:student_jobs/views/widgets/AlertBox.dart';
 import 'package:student_jobs/views/widgets/BulletText.dart';
 
 class JobDetailsBottomSheet extends StatelessWidget {
-  final JobdetailsModel jobDetails;
+  final JobDetailsModel jobDetails;
 
   const JobDetailsBottomSheet({super.key, required this.jobDetails});
 
@@ -43,9 +44,13 @@ class JobDetailsBottomSheet extends StatelessWidget {
             Column(
               children: [
                 ...jobDetails.qualifications.map(
-                      (q) => Padding(
+                  (q) => Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 8),
-                    child: BulletText(text: q, fontSize: 12, fontColor: 0XFF9192A3),
+                    child: BulletText(
+                      text: q,
+                      fontSize: 12,
+                      fontColor: 0XFF9192A3,
+                    ),
                   ),
                 ),
               ],
@@ -55,14 +60,38 @@ class JobDetailsBottomSheet extends StatelessWidget {
         // Apply buttons
         Column(
           children: [
-            // View More Info
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                "View More Info",
-                style: TextStyle(color: Color(0XFF464F5D), fontSize: 12),
-              ),
-            ),
+            jobDetails.profileCompletion
+                ?
+                  // View More Info
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "View More Info",
+                      style: TextStyle(color: Color(0XFF464F5D), fontSize: 12),
+                    ),
+                  )
+                //show alert
+                : Alertbox(
+                    textContent: TextSpan(
+                      style: TextStyle(color: Color(0XFF464F5D), fontSize: 12),
+                      text: "In order to apply you should ",
+                      children: [
+                        TextSpan(
+                          style: TextStyle(
+                            color: Color(0XFFFFC100),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          text: "Complete your profile ",
+                        ),
+                        TextSpan(text: "first &  get auto-entrepreneur card"),
+                      ],
+                    ),
+                    svgIcon: "assets/icons/info.svg",
+                    backgroundColor: 0XFFFFF6DB,
+                    borderColor: 0XFFFFC100,
+                  ),
+            SizedBox(height: 8),
+            //apply now button
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: ElevatedButton(

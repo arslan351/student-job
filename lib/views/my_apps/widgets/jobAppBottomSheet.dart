@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_jobs/models/Card.dart';
+import 'package:student_jobs/models/CardModel.dart';
 import 'package:student_jobs/models/Enums/ApplicationStatus.dart';
 import 'package:student_jobs/views/my_apps/widgets/CardApp.dart';
 import 'package:student_jobs/views/widgets/AlertBox.dart';
@@ -19,7 +19,7 @@ class JobAppBottomSheet extends StatelessWidget {
         // Card
         CardApp(
           myAppModel: MyApplicationModel(
-            CardDto(
+            CardModel(
               logoPath: "",
               title: appDetails.jobInfo.title,
               location: appDetails.jobInfo.location,
@@ -77,7 +77,7 @@ class JobAppBottomSheet extends StatelessWidget {
                   Alertbox(
                     backgroundColor: 0XFFF6DCDD,
                     borderColor: 0XFFFF6369,
-                    textContent: [
+                    textContent: /*[
                       Text(
                         "Incomplete or unapproved files ",
                         style: TextStyle(color: Color(0XFF262430)),
@@ -89,7 +89,17 @@ class JobAppBottomSheet extends StatelessWidget {
                           color: Color(0XFFC7302D),
                         ),
                       ),
-                    ],
+                    ],*/
+                    TextSpan(
+                      text : "Incomplete or unapproved files\n",
+                      style: TextStyle(color: Color(0XFF464F5D),fontSize: 12),
+                      children: [
+                        TextSpan(
+                            text :"Student Certificate",
+                            style: TextStyle(color: Color(0XFFFF6369), fontWeight: FontWeight.bold)
+                        )
+                      ],
+                    ),
                     svgIcon: "assets/icons/close-circle.svg",
                   ),
 

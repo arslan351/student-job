@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Alertbox extends StatelessWidget {
   final int backgroundColor;
   final int borderColor;
-  final List<Text> textContent;
+  final TextSpan textContent;
   final String svgIcon;
 
   const Alertbox({
@@ -36,23 +36,10 @@ class Alertbox extends StatelessWidget {
                 BlendMode.srcIn,
               ),
             ),
-            // Icon(Icons.highlight_remove_outlined , color: Color(0XFFC7302D),),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: textContent,
-              /*[
-                Text(
-                  "Incomplete or unapproved files ",
-                  style: TextStyle(color: Color(0XFF262430)),
-                ),
-                Text(
-                  "Student Certificate",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0XFFC7302D),
-                  ),
-                ),
-              ],*/
+            Expanded(
+              child: RichText(
+                text: textContent,
+              ),
             ),
           ],
         ),

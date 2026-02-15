@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:student_jobs/models/JobDetails.dart';
-import 'package:student_jobs/views/my_jobs/widgets/job_type/job_type.dart';
-import 'package:student_jobs/views/my_jobs/widgets/card/card.dart';
-import 'package:student_jobs/models/JobFilter.dart';
-import 'package:student_jobs/models/Card.dart';
-import 'package:student_jobs/views/my_jobs/widgets/job_type/JobDetailsBottomSheet.dart';
+import 'package:student_jobs/models/JobDetailsModel.dart';
+import 'package:student_jobs/views/my_jobs/widgets/jobFilter.dart';
+import 'package:student_jobs/views/my_jobs/widgets/jobCard.dart';
+import 'package:student_jobs/models/JobFilterModel.dart';
+import 'package:student_jobs/models/CardModel.dart';
+import 'package:student_jobs/views/my_jobs/widgets/JobDetailsBottomSheet.dart';
 import 'package:student_jobs/views/widgets/BottomSheetModel.dart';
 
 class JobsView extends StatefulWidget {
@@ -16,25 +16,25 @@ class JobsView extends StatefulWidget {
 }
 
 class _JobsView extends State<JobsView> {
-  List<JobFilter> jobTypes = [];
-  List<CardDto> cardsDto = [];
-  List<JobdetailsModel> jobsDetails = [];
+  List<JobFilterModel> jobFilterModels = [];
+  List<CardModel> cardsDto = [];
+  List<JobDetailsModel> jobsDetails = [];
   List<String> qualifications = [];
 
   @override
   void initState() {
     super.initState();
 
-    jobTypes = [
-      JobFilter(isClicked: true, svgPath: "assets/icons/bolt.svg", title: "For You"),
-      JobFilter(isClicked: false, svgPath: "assets/icons/monitor.svg", title: "IT"),
-      JobFilter(isClicked: false,svgPath: "assets/icons/call-calling.svg",title: "Support",),
-      JobFilter(isClicked: false,svgPath: "assets/icons/chart.svg",title: "Marketing",),
-      JobFilter(isClicked: false,svgPath: "assets/icons/shopping-bag.svg",title: "Commerce",),
+    jobFilterModels = [
+      JobFilterModel(isClicked: true, svgPath: "assets/icons/bolt.svg", title: "For You"),
+      JobFilterModel(isClicked: false, svgPath: "assets/icons/monitor.svg", title: "IT"),
+      JobFilterModel(isClicked: false,svgPath: "assets/icons/call-calling.svg",title: "Support",),
+      JobFilterModel(isClicked: false,svgPath: "assets/icons/chart.svg",title: "Marketing",),
+      JobFilterModel(isClicked: false,svgPath: "assets/icons/shopping-bag.svg",title: "Commerce",),
     ];
 
     cardsDto = [
-      CardDto(
+      CardModel(
         logoPath: "assets/icons/Logo_Djezzy_cmp.svg",
         title: "Vendeur Boutique Djezzy",
         location: "Alger - Bab Ezzouar",
@@ -44,7 +44,7 @@ class _JobsView extends State<JobsView> {
         deadline: "Deadline : ",
         deadLineValue: "20 Sept",
       ),
-      CardDto(
+      CardModel(
         logoPath: "assets/icons/poste-algerie-cmp.svg",
         title: "IT Support  Algeria Telecom",
         location: "Alger - Bab Ezzouar",
@@ -57,8 +57,8 @@ class _JobsView extends State<JobsView> {
     ];
 
     jobsDetails = [
-      JobdetailsModel(card: cardsDto[0], qualifications: ["Minimum: Baccalauréat (high school diploma) or equivalent." , "Preferred: Degree or training in Commerce, Marketing, or related field..."]),
-      JobdetailsModel(card: cardsDto[1], qualifications: ["Minimum: Baccalauréat (high school diploma) or equivalent." , "Preferred: Degree or training in Commerce, Marketing, or related field..."]),
+      JobDetailsModel(card: cardsDto[0], qualifications: ["Minimum: Baccalauréat (high school diploma) or equivalent." , "Preferred: Degree or training in Commerce, Marketing, or related field...",], profileCompletion: false),
+      JobDetailsModel(card: cardsDto[1], qualifications: ["Minimum: Baccalauréat (high school diploma) or equivalent." , "Preferred: Degree or training in Commerce, Marketing, or related field..."],profileCompletion : true),
     ];
 
 
@@ -83,7 +83,7 @@ class _JobsView extends State<JobsView> {
                     TextSpan(
                       text: "Find Your Perfect ",
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF464F5D),
                       ),
@@ -111,20 +111,20 @@ class _JobsView extends State<JobsView> {
                   child: Row(
                     spacing: 14.0,
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: jobTypes.asMap().entries.map((entry) {
+                    children: jobFilterModels.asMap().entries.map((entry) {
                       final index = entry.key;
                       final jobType = entry.value;
 
-                      return JobType(
+                      return JobFilter(
                         isClicked: jobType.isClicked,
                         svgAssetPicture: jobType.svgPath,
                         title: jobType.title,
                         onTap: () {
                           setState(() {
-                            for (final jt in jobTypes) {
+                            for (final jt in jobFilterModels) {
                               jt.isClicked = false;
                             }
-                            jobTypes[index].isClicked = true;
+                            jobFilterModels[index].isClicked = true;
                           });
                         },
                       );
@@ -187,8 +187,9 @@ class _JobsView extends State<JobsView> {
                   spacing: 16,
                   children:
                     jobsDetails.asMap().entries.map((jobDetailMap){
-                      final CardDto card = jobDetailMap.value.card;
+                      final CardModel card = jobDetailMap.value.card;
                       final List<String> qualifications = jobDetailMap.value.qualifications;
+                      final bool profileCompletion = jobDetailMap.value.profileCompletion ;
                       return CardJob(
                           assetLogo: card.logoPath ,
                           title: card.title,
@@ -204,8 +205,8 @@ class _JobsView extends State<JobsView> {
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
                               builder: (context) {
-                                final jobDetails = JobdetailsModel(card: card, qualifications: qualifications,);
-                                return BottomSheetModel(child: JobDetailsBottomSheet(jobDetails: jobDetails));
+                                final jobDetailsModel = JobDetailsModel(card: card, qualifications: qualifications,profileCompletion: profileCompletion);
+                                return BottomSheetModel(child: JobDetailsBottomSheet(jobDetails: jobDetailsModel));
                               },
                             );
 

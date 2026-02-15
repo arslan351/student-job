@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:student_jobs/models/Action.dart';
-import 'package:student_jobs/views/my_jobs/jobs.dart';
-import 'package:student_jobs/views/my_apps/myApps.dart';
-import 'package:student_jobs/views/my_profile/myProfile.dart';
+import 'package:student_jobs/views/my_jobs/jobsPage.dart';
+import 'package:student_jobs/views/my_apps/appsPage.dart';
+import 'package:student_jobs/views/my_profile/profilePage.dart';
 import 'package:student_jobs/views/my_shifts/myShifts.dart';
+import 'package:student_jobs/views/widgets/AppBar.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -147,69 +148,35 @@ class _HomeState extends State<Home> {
       ),
 
       //app bar
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(90),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          flexibleSpace: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(24),
-              bottomRight: Radius.circular(24),
-            ),
-            child: Stack(
+      appBar :MyAppBar(
+        appBarContent: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Linear gradient
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF27A99A), Color(0xFF19363A)],
-                    ),
-                  ),
+                Builder(
+                  builder: (context) {
+                    return IconButton(
+                      icon: const Icon(Icons.menu, color: Colors.white),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    );
+                  },
                 ),
-                // Bubbles SVG
-                Positioned.fill(
-                  child: SvgPicture.asset(
-                    "assets/icons/background_bubbles.svg",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                // Centered logo + buttons
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Builder(
-                          builder: (context) {
-                            return IconButton(
-                              icon: const Icon(Icons.menu, color: Colors.white),
-                              onPressed: () {
-                                Scaffold.of(context).openDrawer();
-                              },
-                            );
-                          },
-                        ),
 
-                        SvgPicture.asset(
-                          "assets/icons/appBar_logo.svg",
-                          width: 50,
-                        ),
-                        Row(
-                          children: const [
-                            Icon(Icons.search, color: Colors.white),
-                            SizedBox(width: 6),
-                            Icon(Icons.notifications_none, color: Colors.white),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                SvgPicture.asset(
+                  "assets/icons/appBar_logo.svg",
+                  width: 50,
+                ),
+                Row(
+                  children: const [
+                    Icon(Icons.search, color: Colors.white),
+                    SizedBox(width: 6),
+                    Icon(Icons.notifications_none, color: Colors.white),
+                  ],
                 ),
               ],
             ),

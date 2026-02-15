@@ -22,7 +22,7 @@ class OTPForm extends StatelessWidget {
       children: [
         const SizedBox(height: 150),
         const Text(
-          "You will receive an SMS with a 6-digit code.Enter it here.",
+          "You will receive an SMS with a 6-digit code. Enter it here.",
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),

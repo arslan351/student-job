@@ -1,4 +1,4 @@
-class CardDto {
+class CardModel {
   final String logoPath;
   final String title;
   final String location;
@@ -8,7 +8,7 @@ class CardDto {
   final String deadline;
   final String deadLineValue;
 
-  CardDto({
+  CardModel({
     required this.logoPath,
     required this.title,
     required this.location,

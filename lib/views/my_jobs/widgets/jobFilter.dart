@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class JobType extends StatelessWidget {
+class JobFilter extends StatelessWidget {
   final bool isClicked;
   final String svgAssetPicture;
   final String title;
   final VoidCallback onTap;
 
-  const JobType({
+  const JobFilter({
     super.key,
     required this.isClicked,
     required this.svgAssetPicture,

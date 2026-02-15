@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:student_jobs/models/Card.dart';
+import 'package:student_jobs/models/CardModel.dart';
 import 'package:student_jobs/models/Enums/ApplicationStatus.dart';
 
 class MyApplicationModel {
-  final CardDto jobInfo;
+  final CardModel jobInfo;
   final ApplicationStatus status;
   final DateTime appliedOn;
   final List<String> statusList;

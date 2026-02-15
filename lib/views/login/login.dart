@@ -5,7 +5,7 @@ import 'package:student_jobs/views/home.dart';
 import 'widgets/phone_form.dart';
 import 'widgets/otp_form.dart';
 
-import '../my_jobs/jobs.dart';
+import '../my_jobs/jobsPage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

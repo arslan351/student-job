@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_jobs/models/Card.dart';
+import 'package:student_jobs/models/CardModel.dart';
 import 'package:student_jobs/models/Enums/ApplicationStatus.dart';
 import 'package:student_jobs/models/MyApplication.dart';
 import 'package:student_jobs/views/my_apps/widgets/CardApp.dart';
@@ -22,7 +22,7 @@ class _MyAppsViewState extends State<MyAppsView> {
         .initState();
     applications = [
       MyApplicationModel(
-        CardDto(
+        CardModel(
           logoPath: "",
           title: "Vendeur Boutique Djezzy",
           location: "Alger - Bab Ezzouar",
@@ -38,7 +38,7 @@ class _MyAppsViewState extends State<MyAppsView> {
         statusList:["Please fill out the rejected forms and try again."],
       ),
       MyApplicationModel(
-        CardDto(
+        CardModel(
           logoPath: "",
           title: "Vendeur Boutique Djezzy",
           location: "Alger - Bab Ezzouar",
@@ -54,7 +54,7 @@ class _MyAppsViewState extends State<MyAppsView> {
         statusList:["Please fill out the rejected forms and try again."],
       ),
       MyApplicationModel(
-        CardDto(
+        CardModel(
           logoPath: "",
           title: "Vendeur Boutique Djezzy",
           location: "Boumerdes - Corso",
@@ -70,7 +70,7 @@ class _MyAppsViewState extends State<MyAppsView> {
         statusList:["Congratulations your application have been Accepted for this job"],
       ),
       MyApplicationModel(
-        CardDto(
+        CardModel(
           logoPath: "",
           title: "Vendeur Boutique Djezzy",
           location: "Alger - Dar el Beida",
@@ -93,7 +93,7 @@ class _MyAppsViewState extends State<MyAppsView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsetsGeometry.all(16),
+        padding: const EdgeInsetsGeometry.fromLTRB(16,8,16,8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -106,7 +106,7 @@ class _MyAppsViewState extends State<MyAppsView> {
                   style: TextStyle(
                     color: Color(0XFF464F5D),
                     fontWeight: FontWeight.bold,
-                    fontSize: 26,
+                    fontSize: 22,
                   ),
                 ),
               ),
@@ -120,7 +120,7 @@ class _MyAppsViewState extends State<MyAppsView> {
                   applications.asMap().entries.map((entry){
                     //final index = entry.key;
                     final MyApplicationModel jobApplication = entry.value;
-                    final CardDto card = entry.value.jobInfo;
+                    final CardModel card = entry.value.jobInfo;
                     final status = entry.value.status;
                     final appliedOn = entry.value.appliedOn;
                     final profileCompletion = entry.value.profileCompletion;
