@@ -26,22 +26,40 @@ class PhoneForm extends StatelessWidget{
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 24.0,
           children: List.generate(
             5,
-                (_) => Column(
-              children: const [
-                Text("XX", style: TextStyle(color: Colors.white)),
-                SizedBox(height: 4),
-                SizedBox(
-                  width: 40,
-                  height: 2,
-                  child: ColoredBox(color: Colors.white),
-                ),
-              ],
+                (index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 30,
+                    child: TextField(
+                      style: TextStyle(color: Colors.white),
+                      keyboardType: TextInputType.number,
+                      maxLength: 2,
+                      textAlign: TextAlign.center,
+                      cursorColor: Colors.white,
+                      decoration: const InputDecoration(
+                        counterText: "",
+                        border: InputBorder.none,
+                      ),
+
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const SizedBox(
+                    width: 30,
+                    height: 2,
+                    child: ColoredBox(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        )
+,
 
         const SizedBox(height: 30),
 

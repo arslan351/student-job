@@ -11,70 +11,108 @@ class AlertPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 20,
-                  offset: Offset(0, 10),
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 20,
+                offset: Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Icon for Auto-Entrepreneur
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: alertInfosModel.alertColor.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: SvgPicture.asset(
+                    alertInfosModel.imagePath,
+                    width: 45,
+                    colorFilter: ColorFilter.mode(
+                      alertInfosModel.alertColor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Icon for Auto-Entrepreneur
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: alertInfosModel.alertColor/*Color(0XFF1C9F80)*/.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: SvgPicture.asset(alertInfosModel.imagePath/*"assets/icons/briefcase.svg"*/,width: 45,colorFilter:ColorFilter.mode(alertInfosModel.alertColor/*Color(0XFF1C9F80)*/, BlendMode.srcIn) ,)
-                  ),
-                  SizedBox(height: 16),
+                SizedBox(height: 16),
 
-                  // Title
-                  Text(
-                    alertInfosModel.title,/*'Auto-Entrepreneur',*/
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF262430),
-                    ),
+                // Title
+                Text(
+                  alertInfosModel.title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF262430),
                   ),
-                  SizedBox(height: 8),
+                ),
+                SizedBox(height: 8),
 
-                  // Message
-                  Text(
-                    alertInfosModel.description,/*"Congratulations! Your Auto-Entrepreneur profile has been successfully verified.",*/
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF9192A3),
-                      fontSize: 14,
-                      height: 1.5,
-                    ),
+                // Message
+                Text(
+                  alertInfosModel.description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFF9192A3),
+                    fontSize: 14,
+                    height: 1.5,
                   ),
-                  SizedBox(height: 24),
+                ),
+                SizedBox(height: 24),
 
-                  // Button
-                  SizedBox(
+                // Button
+
+                Row(
+                  children: alertInfosModel.buttonList.map((btn) {
+                    return Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: btn["color"],
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            btn["title"],
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                )
+
+                /*
+                SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: alertInfosModel.alertColor /*Color(0XFF1C9F80)*/,
+                        backgroundColor: alertInfosModel.alertColor ,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -85,7 +123,7 @@ class AlertPopup extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        alertInfosModel.buttonText,/*'Go Back',*/
+                        alertInfosModel.buttonText,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -93,13 +131,14 @@ class AlertPopup extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
+*/
+
+
+              ],
             ),
           ),
         ),
-      );
-
+      ),
+    );
   }
 }
-

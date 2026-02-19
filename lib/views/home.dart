@@ -5,14 +5,15 @@ import 'package:student_jobs/views/my_jobs/jobsPage.dart';
 import 'package:student_jobs/views/my_apps/appsPage.dart';
 import 'package:student_jobs/views/my_profile/profilePage.dart';
 import 'package:student_jobs/views/my_shifts/myShifts.dart';
+import 'package:student_jobs/views/profileDetails/myFavJob.dart';
 import 'package:student_jobs/views/widgets/AppBar.dart';
+import 'package:student_jobs/views/widgets/SectionDetailsView.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
-
 }
 
 class _HomeState extends State<Home> {
@@ -22,23 +23,22 @@ class _HomeState extends State<Home> {
     const JobsView(),
     const MyAppsView(),
     const MyShiftsView(),
-    const MyprofileView(),
+    const MyProfileView(),
   ];
 
-  List<ActionsDto>actions =[];
+  List<ActionsDto> actions = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     actions = [
-      ActionsDto(true , "Jobs", "assets/icons/briefcase.svg"),
-      ActionsDto(false , "My Applications", "assets/icons/myapps.svg"),
-      ActionsDto(false , "My Shifts", "assets/icons/myshift.svg"),
-      ActionsDto(false , "My Profile", "assets/icons/myprofile.svg"),
+      ActionsDto(true, "Jobs", "assets/icons/briefcase.svg"),
+      ActionsDto(false, "My Applications", "assets/icons/myapps.svg"),
+      ActionsDto(false, "My Shifts", "assets/icons/myshift.svg"),
+      ActionsDto(false, "My Profile", "assets/icons/myprofile.svg"),
     ];
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                ListTile(
+                /*ListTile(
                   tileColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
                   ),
                   title: Text("07 79 79 46 28"),
                   onTap: () {},
-                ),
+                ),*/
                 ListTile(
                   tileColor: Colors.white,
                   shape: RoundedRectangleBorder(
@@ -88,7 +88,16 @@ class _HomeState extends State<Home> {
                     width: 24,
                   ),
                   title: Text("My Profile"),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      _selectedIndex = 3;
+                      for (final action in actions) {
+                        action.isClicked = false;
+                      }
+                      actions[3].isClicked = true;
+                    });
+                  },
                 ),
                 ListTile(
                   tileColor: Colors.white,
@@ -100,7 +109,12 @@ class _HomeState extends State<Home> {
                     width: 24,
                   ),
                   title: Text("My Favorite Jobs"),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                        builder : (context)=>
+                        SectionDetailsView(title: "My Favorites Jobs")) ,
+                    );
+                  },
                 ),
                 ListTile(
                   tileColor: Colors.white,
@@ -112,7 +126,12 @@ class _HomeState extends State<Home> {
                     width: 24,
                   ),
                   title: Text("My Support"),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                        builder : (context)=>
+                            SectionDetailsView(title: "My Support")) ,
+                    );
+                  },
                 ),
                 ListTile(
                   tileColor: Colors.white,
@@ -123,8 +142,13 @@ class _HomeState extends State<Home> {
                     "assets/icons/setting-3.svg",
                     width: 24,
                   ),
-                  title: Text("My Preference"),
-                  onTap: () {},
+                  title: Text("My Preferences"),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                        builder : (context)=>
+                            SectionDetailsView(title: "My Preferences")) ,
+                    );
+                  },
                 ),
                 ListTile(
                   tileColor: Colors.white,
@@ -148,7 +172,7 @@ class _HomeState extends State<Home> {
       ),
 
       //app bar
-      appBar :MyAppBar(
+      appBar: MyAppBar(
         appBarContent: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
@@ -167,10 +191,7 @@ class _HomeState extends State<Home> {
                   },
                 ),
 
-                SvgPicture.asset(
-                  "assets/icons/appBar_logo.svg",
-                  width: 50,
-                ),
+                SvgPicture.asset("assets/icons/appBar_logo.svg", width: 50),
                 Row(
                   children: const [
                     Icon(Icons.search, color: Colors.white),
@@ -185,10 +206,7 @@ class _HomeState extends State<Home> {
       ),
 
       //body
-      body: IndexedStack(
-        index : _selectedIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _pages),
 
       //bottom nav bar
       bottomNavigationBar: Material(
@@ -199,20 +217,20 @@ class _HomeState extends State<Home> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: actions.asMap().entries.map((entry){
+            children: actions.asMap().entries.map((entry) {
               final int index = entry.key;
-              final ActionsDto action = entry.value ;
+              final ActionsDto action = entry.value;
 
               return Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: (){
+                  onTap: () {
                     setState(() {
-                      for(final action in actions){
+                      for (final action in actions) {
                         action.isClicked = false;
                       }
                       actions[index].isClicked = true;
-                      _selectedIndex=index;
+                      _selectedIndex = index;
                     });
                   },
                   child: Column(
@@ -220,7 +238,9 @@ class _HomeState extends State<Home> {
                     children: [
                       SvgPicture.asset(
                         colorFilter: ColorFilter.mode(
-                          action.isClicked ? Color(0XFF1C9F80) : Color(0xB2262430),
+                          action.isClicked
+                              ? Color(0XFF1C9F80)
+                              : Color(0xB2262430),
                           BlendMode.srcIn,
                         ),
                         action.pathLogo,
@@ -232,7 +252,9 @@ class _HomeState extends State<Home> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 10,
-                          color: action.isClicked ? Color(0XFF1C9F80) : Color(0xB2262430),
+                          color: action.isClicked
+                              ? Color(0XFF1C9F80)
+                              : Color(0xB2262430),
                         ),
                       ),
                     ],
@@ -245,6 +267,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-
 }

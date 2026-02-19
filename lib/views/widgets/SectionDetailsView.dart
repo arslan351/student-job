@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:student_jobs/views/profileDetails/myDocs.dart';
+import 'package:student_jobs/views/profileDetails/myFavJob.dart';
 import 'package:student_jobs/views/profileDetails/myInfos.dart';
+import 'package:student_jobs/views/profileDetails/myPreference.dart';
+import 'package:student_jobs/views/profileDetails/mySupport.dart';
 import 'package:student_jobs/views/widgets/AppBar.dart';
 
 class SectionDetailsView extends StatefulWidget {
@@ -16,6 +19,9 @@ class _SectionDetailsViewState extends State<SectionDetailsView> {
   final Map<String , Widget> contentMap = {
     'Informations': Myinfos(),
     'Documents' : MyDocs(),
+    'My Favorites Jobs' : MyFavJob(),
+    'My Preferences' : MyPreference(),
+    'My Support' : MySupport(),
   };
 
   @override

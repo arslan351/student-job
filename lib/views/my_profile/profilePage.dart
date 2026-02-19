@@ -8,62 +8,53 @@ import 'package:student_jobs/views/my_profile/widgets/Section.dart';
 import 'package:student_jobs/views/widgets/AlertPopup.dart';
 import 'package:student_jobs/views/widgets/SectionDetailsView.dart';
 
-class MyprofileView extends StatefulWidget {
-  const MyprofileView({super.key});
+class MyProfileView extends StatefulWidget {
+  const MyProfileView({super.key});
   @override
-  State<MyprofileView> createState() => _MyprofileViewState();
+  State<MyProfileView> createState() => _MyProfileViewState();
 }
 
-class _MyprofileViewState extends State<MyprofileView> {
+class _MyProfileViewState extends State<MyProfileView> {
   String assetsPath = "assets/icons/";
   List<SectionModel> sections = [];
-  bool isAutoEntrepreneur = true ;
+  bool isAutoEntrepreneur = false;
 
   @override
   void initState() {
     super.initState();
 
     sections = [
-      SectionModel(
-        "Informations ",
-        "Completed",
-        {"path" : assetsPath + "verified.svg" , "color" : Color(0XFF32B942)},/*assetsPath + "verified.svg",*/
-        sectionLogo: assetsPath + "personalcard.svg",
-      ),
-      SectionModel(
-        "Documents ",
-        "Uploaded",
-        {"path" : assetsPath + "verified.svg" , "color" : Color(0XFF32B942)},//assetsPath + "verified.svg",
-        sectionLogo: assetsPath + "personalcard.svg",
-      ),
+      SectionModel("Informations ", "Completed", {
+        "path": assetsPath + "verified.svg",
+        "color": Color(0XFF32B942),
+      }, sectionLogo: assetsPath + "personalcard.svg"),
+      SectionModel("Documents ", "Uploaded", {
+        "path": assetsPath + "verified.svg",
+        "color": Color(0XFF32B942),
+      }, sectionLogo: assetsPath + "personalcard.svg"),
       SectionModel(
         "Auto-Entrepreneur ",
         isAutoEntrepreneur ? "Verified" : "Unverified",
-        isAutoEntrepreneur ?
-          {"path" : assetsPath + "verified.svg" , "color" : Color(0XFF32B942)}
-        :
-          {"path" : assetsPath + "unverified.svg" , "color" : Color(0XFFF6454C)},
-        /*isAutoEntrepreneur ? assetsPath+"verified.svg" : assetsPath+"unverified.svg",*/
+        isAutoEntrepreneur
+            ? {"path": assetsPath + "verified.svg", "color": Color(0XFF32B942)}
+            : {
+                "path": assetsPath + "unverified.svg",
+                "color": Color(0XFFF6454C),
+              },
         sectionLogo: assetsPath + "personalcard.svg",
       ),
-      SectionModel(
-        "My Favorites Jobs ",
-        "",
-        {"path" : "" , "color" : ""},
-        sectionLogo: assetsPath + "archive-tick.svg",
-      ),
-      SectionModel(
-        "My Preferences ",
-        "",
-        {"path" : "" , "color" : ""},
-        sectionLogo: assetsPath + "setting-3.svg",
-      ),
-      SectionModel(
-        "My Support ",
-        "",
-        {"path" : "" , "color" : ""},
-        sectionLogo: assetsPath + "double-circle.svg",
-      ),
+      SectionModel("My Favorites Jobs ", "", {
+        "path": "",
+        "color": "",
+      }, sectionLogo: assetsPath + "archive-tick.svg"),
+      SectionModel("My Preferences ", "", {
+        "path": "",
+        "color": "",
+      }, sectionLogo: assetsPath + "setting-3.svg"),
+      SectionModel("My Support ", "", {
+        "path": "",
+        "color": "",
+      }, sectionLogo: assetsPath + "double-circle.svg"),
     ];
   }
 
@@ -132,15 +123,33 @@ class _MyprofileViewState extends State<MyprofileView> {
                 statusLogo: section.statusLogo,
                 sectionLogo: section.sectionLogo,
                 onTap: () {
-                  if(section.title.trim() == "Auto-Entrepreneur"){
-                    return _showDialog(context , isAutoEntrepreneur);
-                  }else {
+                  if (section.title.trim() == "Auto-Entrepreneur") {
+                    final alertInfosModel = isAutoEntrepreneur ?
+                    AlertInfosModel(
+                      imagePath: "assets/icons/briefcase.svg",
+                      title: 'Auto-Entrepreneur',
+                      description:
+                      "Congratulations! Your Auto-Entrepreneur profile has been successfully verified.",
+                      buttonList: [{"title":"Go Back","color":Color(0XFF1C9F80)}]  ,
+                      alertColor: Color(0XFF1C9F80),
+                    )
+                        :
+                    AlertInfosModel(
+                      imagePath: "assets/icons/briefcase.svg",
+                      title: 'Auto-Entrepreneur',
+                      description:
+                      "In order to apply you should have the auto-entrepreneur card as it is required for the application",
+                      buttonList: [{"title":"Go Back","color":Color(0XFFF0A14A)}] ,
+                      alertColor: Color(0XFFF0A14A),
+                    );
+                    return _showDialog(context, alertInfosModel);
+                  } else {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: ((context) => SectionDetailsView(title :section.title.trim())
-                      )
-                      )
+                        builder: ((context) =>
+                            SectionDetailsView(title: section.title.trim())),
+                      ),
                     );
                   }
                 },
@@ -186,7 +195,10 @@ class _MyprofileViewState extends State<MyprofileView> {
                 Expanded(
                   flex: 3,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      final alertInfosModel =AlertInfosModel(imagePath: "assets/icons/info.svg", title: "Delete Account", description: "This action cannot be undone. All your data will be permanently removed.", buttonList: [{"title":"Cancel","color":Color(0x669192A3)} ,{"title":"Confirm","color":Color(0XFFFFC100)}  ], alertColor: Color(0XFFFFC100));
+                      _showDialog(context, alertInfosModel);
+                    },
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     hoverColor: Colors.transparent,
@@ -234,20 +246,21 @@ class _MyprofileViewState extends State<MyprofileView> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        border :BoxBorder.all(
-                          color: Color(0XFF9192A3)
-                        )
+                        border: BoxBorder.all(color: Color(0XFF9192A3)),
                       ),
                       child: Padding(
                         padding: EdgeInsetsGeometry.all(14),
                         child: Row(
                           spacing: 8,
                           children: [
-                            SvgPicture.asset("assets/icons/user-tag.svg", width: 20,
+                            SvgPicture.asset(
+                              "assets/icons/user-tag.svg",
+                              width: 20,
                               colorFilter: ColorFilter.mode(
-                              Color(0XFF9192A3),
-                              BlendMode.srcIn,
-                            ),),
+                                Color(0XFF9192A3),
+                                BlendMode.srcIn,
+                              ),
+                            ),
                             Text(
                               "Data Privacy",
                               style: TextStyle(
@@ -269,21 +282,22 @@ class _MyprofileViewState extends State<MyprofileView> {
                     hoverColor: Colors.transparent,
                     child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border :BoxBorder.all(
-                              color: Color(0XFF9192A3)
-                          )
+                        borderRadius: BorderRadius.circular(16),
+                        border: BoxBorder.all(color: Color(0XFF9192A3)),
                       ),
                       child: Padding(
                         padding: EdgeInsetsGeometry.all(14),
                         child: Row(
                           spacing: 8,
                           children: [
-                            SvgPicture.asset("assets/icons/profile-tick.svg", width: 20,
+                            SvgPicture.asset(
+                              "assets/icons/profile-tick.svg",
+                              width: 20,
                               colorFilter: ColorFilter.mode(
                                 Color(0XFF9192A3),
                                 BlendMode.srcIn,
-                              ),),
+                              ),
+                            ),
                             Text(
                               "Terms of use",
                               style: TextStyle(
@@ -301,10 +315,16 @@ class _MyprofileViewState extends State<MyprofileView> {
             ),
             Column(
               children: [
-                Text("Version 4.3.4.1",style: TextStyle(fontSize: 10 , color: Color(0XFF9192A3)),),
-                Text("Djezzy ©2025 All Rights reserved",style: TextStyle(fontSize: 10 , color: Color(0XFF9192A3)),),
+                Text(
+                  "Version 4.3.4.1",
+                  style: TextStyle(fontSize: 10, color: Color(0XFF9192A3)),
+                ),
+                Text(
+                  "Djezzy ©2025 All Rights reserved",
+                  style: TextStyle(fontSize: 10, color: Color(0XFF9192A3)),
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -314,21 +334,13 @@ class _MyprofileViewState extends State<MyprofileView> {
 
 
 
-void _showDialog(BuildContext context , bool isAutoEntrepreneur) {
+void _showDialog(BuildContext context, AlertInfosModel alertInfosModel) {
   showDialog(
     context: context,
     barrierDismissible: true,
     barrierColor: Colors.black.withValues(alpha: 0.3),
     builder: (BuildContext context) {
-      final AlertInfosModel alertInfo;
-
-      if(isAutoEntrepreneur){
-        alertInfo = AlertInfosModel(imagePath: "assets/icons/briefcase.svg", title: 'Auto-Entrepreneur', description: "Congratulations! Your Auto-Entrepreneur profile has been successfully verified.", buttonText: "Go Back", alertColor: Color(0XFF1C9F80));
-      }else {
-        alertInfo = AlertInfosModel(imagePath: "assets/icons/briefcase.svg", title: 'Auto-Entrepreneur', description: "In order to apply you should have the auto-entrepreneur card as it is required for the application", buttonText: "Go Back", alertColor: Color(0XFFF0A14A));
-      }
-
-      return  AlertPopup(alertInfosModel: alertInfo);
+      return AlertPopup(alertInfosModel: alertInfosModel);
     },
   );
 }
