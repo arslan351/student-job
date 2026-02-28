@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:student_jobs/views/widgets/TwoDigitInput.dart';
 
-class PhoneForm extends StatelessWidget{
+class PhoneForm extends StatefulWidget{
   final VoidCallback onSubmit;
   final bool isChecked;
   final ValueChanged<bool> onCheckboxChanged;
@@ -13,6 +14,12 @@ class PhoneForm extends StatelessWidget{
   });
 
   @override
+  State<PhoneForm> createState() => _PhoneFormState();
+}
+
+class _PhoneFormState extends State<PhoneForm> {
+  bool isButtonEnabled = false;
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -24,33 +31,17 @@ class PhoneForm extends StatelessWidget{
         ),
         const SizedBox(height: 12),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 24.0,
-          children: List.generate(
-            5,
-                (_) => Column(
-              children: const [
-                Text("XX", style: TextStyle(color: Colors.white)),
-                SizedBox(height: 4),
-                SizedBox(
-                  width: 40,
-                  height: 2,
-                  child: ColoredBox(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
+        TwoDigitInputs(fieldCount: 5),
 
         const SizedBox(height: 30),
 
         SizedBox(
           width: double.infinity,
-          height: 56,
+          height: 45,
           child: ElevatedButton(
-            onPressed: onSubmit,
+            onPressed: isButtonEnabled ? widget.onSubmit : null,
             style: ElevatedButton.styleFrom(
+              disabledBackgroundColor: Colors.white70,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
@@ -93,11 +84,11 @@ class PhoneForm extends StatelessWidget{
         Row(
           children: [
             Checkbox(
-              value: isChecked,
+              value: widget.isChecked,
               side: const BorderSide(color: Colors.white),
               activeColor: const Color(0xFFA4D9CC),
               checkColor: const Color(0xFF1C9F80),
-              onChanged: (v)=>onCheckboxChanged(v!) ,
+              onChanged: (v)=>widget.onCheckboxChanged(v!) ,
             ),
             const Expanded(
               child: Text.rich(
