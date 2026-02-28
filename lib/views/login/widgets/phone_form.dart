@@ -18,7 +18,8 @@ class PhoneForm extends StatefulWidget{
 }
 
 class _PhoneFormState extends State<PhoneForm> {
-  bool isButtonEnabled = false;
+  bool isAllFieldsFilled = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,7 +32,9 @@ class _PhoneFormState extends State<PhoneForm> {
         ),
         const SizedBox(height: 12),
 
-        TwoDigitInputs(fieldCount: 5),
+        TwoDigitInputs(fieldCount: 5, onChanged: (value)=>setState(() {
+          isAllFieldsFilled = value;
+        }),),
 
         const SizedBox(height: 30),
 
@@ -39,7 +42,7 @@ class _PhoneFormState extends State<PhoneForm> {
           width: double.infinity,
           height: 45,
           child: ElevatedButton(
-            onPressed: isButtonEnabled ? widget.onSubmit : null,
+            onPressed: (widget.isChecked && isAllFieldsFilled) ? widget.onSubmit : null,
             style: ElevatedButton.styleFrom(
               disabledBackgroundColor: Colors.white70,
               shape: RoundedRectangleBorder(
