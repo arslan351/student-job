@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:student_jobs/views/widgets/TwoDigitInput.dart';
 
-class PhoneForm extends StatelessWidget{
+class PhoneForm extends StatefulWidget{
   final VoidCallback onSubmit;
   final bool isChecked;
   final ValueChanged<bool> onCheckboxChanged;
@@ -11,6 +12,13 @@ class PhoneForm extends StatelessWidget{
     required this.isChecked,
     required this.onCheckboxChanged,
   });
+
+  @override
+  State<PhoneForm> createState() => _PhoneFormState();
+}
+
+class _PhoneFormState extends State<PhoneForm> {
+  bool isAllFieldsFilled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,51 +32,19 @@ class PhoneForm extends StatelessWidget{
         ),
         const SizedBox(height: 12),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            5,
-                (index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 30,
-                    child: TextField(
-                      style: TextStyle(color: Colors.white),
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      textAlign: TextAlign.center,
-                      cursorColor: Colors.white,
-                      decoration: const InputDecoration(
-                        counterText: "",
-                        border: InputBorder.none,
-                      ),
-
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const SizedBox(
-                    width: 30,
-                    height: 2,
-                    child: ColoredBox(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        )
-,
+        TwoDigitInputs(fieldCount: 5, onChanged: (value)=>setState(() {
+          isAllFieldsFilled = value;
+        }),),
 
         const SizedBox(height: 30),
 
         SizedBox(
           width: double.infinity,
-          height: 56,
+          height: 45,
           child: ElevatedButton(
-            onPressed: onSubmit,
+            onPressed: (widget.isChecked && isAllFieldsFilled) ? widget.onSubmit : null,
             style: ElevatedButton.styleFrom(
+              disabledBackgroundColor: Colors.white70,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
@@ -111,11 +87,11 @@ class PhoneForm extends StatelessWidget{
         Row(
           children: [
             Checkbox(
-              value: isChecked,
+              value: widget.isChecked,
               side: const BorderSide(color: Colors.white),
               activeColor: const Color(0xFFA4D9CC),
               checkColor: const Color(0xFF1C9F80),
-              onChanged: (v)=>onCheckboxChanged(v!) ,
+              onChanged: (v)=>widget.onCheckboxChanged(v!) ,
             ),
             const Expanded(
               child: Text.rich(
