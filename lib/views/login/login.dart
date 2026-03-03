@@ -1,21 +1,29 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:student_jobs/providers/authProvider.dart';
+import 'package:student_jobs/services/otpService.dart';
 import 'package:student_jobs/views/home.dart';
+import '../../services/dioClient.dart';
 import 'widgets/phone_form.dart';
 import 'widgets/otp_form.dart';
 
 import '../my_jobs/jobsPage.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
+class _LoginScreenState extends ConsumerState<LoginScreen>
     with SingleTickerProviderStateMixin {
+
+  final OtpService _otpService =OtpService(DioClient().dio);
+
   late AnimationController _controller;
   late Animation<double> _logoAnimation;
   late Animation<double> _formOpacity;
@@ -49,6 +57,11 @@ class _LoginScreenState extends State<LoginScreen>
         });
       }
     });
+  }
+  
+  void _resendOtp() {
+    final String? phone =ref.watch(authStateProvider.select((s)=>s.phone))?.trim();
+    _otpService.fetchOtp(phone!);
   }
 
   @override
@@ -146,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen>
                           onResend: () {
                             _startResendCountdown();
                             // TODO: Call resend OTP API
+                            _resendOtp();
                           },
                           onConfirm: (){
                             Navigator.pushReplacement(

@@ -3,9 +3,15 @@ import 'package:flutter/services.dart';
 
 class TwoDigitInputs extends StatefulWidget {
   final int fieldCount;
-  final Function(bool isComplete) onChanged;
+  final Function(bool isComplete, String fullValue) onChanged;
 
-  const TwoDigitInputs({super.key, required this.fieldCount, required this.onChanged});
+  const TwoDigitInputs({
+    super.key,
+    required this.fieldCount,
+    required this.onChanged,
+  });
+
+
   @override
   _TwoDigitInputsState createState() => _TwoDigitInputsState();
 }
@@ -65,9 +71,11 @@ class _TwoDigitInputsState extends State<TwoDigitInputs> {
                 if (value.length == 2 && index < widget.fieldCount - 1) {
                   focusNodes[index + 1].requestFocus();
                 }
+                final full = controllers.map((c) => c.text.trim()).join();
+                final complete = full.length == widget.fieldCount * 2;
 
-                bool isComplete = controllers.every((c) => c.text.length == 2);
-                widget.onChanged(isComplete);
+                //bool isComplete = controllers.every((c) => c.text.length == 2);
+                widget.onChanged(complete , full);
 
               },
             ),

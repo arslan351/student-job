@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:student_jobs/services/dioClient.dart';
 import 'views/login/login.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  DioClient().initialize();
+  runApp(const ProviderScope(child : MyApp()));
 }
 
 class MyApp extends StatelessWidget {
