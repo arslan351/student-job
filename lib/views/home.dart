@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:student_jobs/models/Action.dart';
+import 'package:student_jobs/models/AlertInfosModel.dart';
+import 'package:student_jobs/providers/authProvider.dart';
+import 'package:student_jobs/views/login/login.dart';
 import 'package:student_jobs/views/my_jobs/jobsPage.dart';
 import 'package:student_jobs/views/my_apps/appsPage.dart';
 import 'package:student_jobs/views/my_profile/profilePage.dart';
 import 'package:student_jobs/views/my_shifts/myShifts.dart';
 import 'package:student_jobs/views/profileDetails/myFavJob.dart';
+import 'package:student_jobs/views/widgets/AlertPopup.dart';
 import 'package:student_jobs/views/widgets/AppBar.dart';
 import 'package:student_jobs/views/widgets/SectionDetailsView.dart';
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -163,7 +168,7 @@ class _HomeState extends State<Home> {
                     "Logout",
                     style: TextStyle(color: Color(0XFFE43F3B)),
                   ),
-                  onTap: () {},
+                  onTap: () {_handleLogout(context,ref);},
                 ),
               ],
             ),
@@ -265,6 +270,52 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+    );
+  }
+
+
+
+  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
+    final alertInfosModel = AlertInfosModel(
+      imagePath: "assets/icons/info.svg",
+      title: "Log Out",
+      description:
+      "Are you Sure you want to Logout. you will have to re-enter your phone number",
+      buttonList: [
+        {"title": "Cancel", "color": Color(0x669192A3), "onPressed": null},
+        {
+          "title": "Confirm",
+          "color": Color(0XFFFFC100),
+          "onPressed": () async {
+            await ref.read(authStateProvider.notifier).logout();
+
+            if (!context.mounted) return;
+
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+            );
+
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Logged out')));
+          },
+        },
+      ],
+      alertColor: Color(0XFFFFC100),
+    );
+    _showDialog(context, alertInfosModel);
+  }
+
+  void _showDialog(BuildContext context, AlertInfosModel alertInfosModel) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
+      builder: (BuildContext context) {
+        return AlertPopup(alertInfosModel: alertInfosModel);
+      },
     );
   }
 }

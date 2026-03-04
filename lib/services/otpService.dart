@@ -32,4 +32,28 @@ class OtpService {
       }
     }
   }
+
+  Future<OtpResult> verifyOtp(Map<String, String> body,   ) async{
+    try {
+
+      final response =await _dio.post("http://localhost:3001/verifyOtp", data :body ,  options: Options(
+        headers: {"Content-Type": "application/json"},
+        responseType: ResponseType.json,
+        validateStatus: (_) => true,
+      ),);
+
+      if(response.statusCode == 200) {
+        return OtpResult.success(response.data as Map<String,dynamic>);
+
+      }else{
+        return OtpResult.failure(errorMessage: response.data["message"], statusCode: response.statusCode);
+      }
+    }on DioException catch (e) {
+      if(e.response != null){
+        return OtpResult.fromException(e);
+      }else {
+        return OtpResult.failure(errorMessage: "Unexpected Error");
+      }
+    }
+  }
 }

@@ -92,6 +92,7 @@ class AlertPopup extends StatelessWidget {
                             padding: EdgeInsets.symmetric(vertical: 16),
                           ),
                           onPressed: () {
+                            btn["onPressed"]?.call();
                             Navigator.of(context).pop();
                           },
                           child: Text(
@@ -106,32 +107,6 @@ class AlertPopup extends StatelessWidget {
                     );
                   }).toList(),
                 )
-
-                /*
-                SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: alertInfosModel.alertColor ,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        alertInfosModel.buttonText,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-*/
 
 
               ],

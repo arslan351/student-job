@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_jobs/models/AlertInfosModel.dart';
+import 'package:student_jobs/providers/authProvider.dart';
 import 'package:student_jobs/services/dioClient.dart';
 import 'package:student_jobs/services/otpService.dart';
 import 'package:student_jobs/views/widgets/AlertPopup.dart';
 import 'package:student_jobs/views/widgets/MyElevatedButton.dart';
 import 'package:student_jobs/views/widgets/TwoDigitInput.dart';
 
-class OTPForm extends StatefulWidget {
+class OTPForm extends ConsumerStatefulWidget {
   final int secondsLeft;
   final bool canResend;
   final VoidCallback? onResend;
@@ -21,10 +23,10 @@ class OTPForm extends StatefulWidget {
   });
 
   @override
-  State<OTPForm> createState() => _OTPFormState();
+  ConsumerState<OTPForm> createState() => _OTPFormState();
 }
 
-class _OTPFormState extends State<OTPForm> {
+class _OTPFormState extends ConsumerState<OTPForm> {
   bool isAllFieldsFilled =false;
   bool _isLoading =false;
   final OtpService _otpService =OtpService(DioClient().dio);
@@ -35,17 +37,23 @@ class _OTPFormState extends State<OTPForm> {
     return _otpValue!;
   }
 
-  Future<void> _sendOtp() async {
-    setState((){
-      _isLoading=true ;
-      //_otpData = null;
-    });
+  Future<void> _verifyOtp() async {
+    setState(() => _isLoading = true);
     final otp = _getOtp().trim();
-    final result = await _otpService.fetchOtp(otp);
+    final phone = ref.watch(authStateProvider.select((state)=>state.phone))!;
+    final body = {
+      'phone': phone,
+      'otp': otp,
+    };
 
+    final result = await _otpService.verifyOtp(body);
     setState(() => _isLoading = false);
 
     if(result.isSuccess){
+      final token = result.data?['token'] as String? ?? 'mock-token-123';
+
+      ref.read(authStateProvider.notifier).setOtpSuccess(token);
+
       widget.onConfirm?.call();
     }else {
       _showDialog(
@@ -135,7 +143,7 @@ class _OTPFormState extends State<OTPForm> {
           fontWeight: FontWeight.bold,
         ),), borderRadius: 24, height: 45,onPressed: null,onPressedAsync: ( isAllFieldsFilled && !_isLoading) ?
             () async{
-          await _sendOtp();
+          await _verifyOtp();
 
         }: null),
         

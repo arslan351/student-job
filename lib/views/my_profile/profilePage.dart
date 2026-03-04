@@ -1,20 +1,23 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:student_jobs/models/AlertInfosModel.dart';
 import 'package:student_jobs/models/SectionModel.dart';
+import 'package:student_jobs/providers/authProvider.dart';
+import 'package:student_jobs/views/login/login.dart';
 import 'package:student_jobs/views/my_profile/widgets/Section.dart';
 import 'package:student_jobs/views/widgets/AlertPopup.dart';
 import 'package:student_jobs/views/widgets/SectionDetailsView.dart';
 
-class MyProfileView extends StatefulWidget {
+class MyProfileView extends ConsumerStatefulWidget {
   const MyProfileView({super.key});
   @override
-  State<MyProfileView> createState() => _MyProfileViewState();
+  ConsumerState<MyProfileView> createState() => _MyProfileViewState();
 }
 
-class _MyProfileViewState extends State<MyProfileView> {
+class _MyProfileViewState extends ConsumerState<MyProfileView> {
   String assetsPath = "assets/icons/";
   List<SectionModel> sections = [];
   bool isAutoEntrepreneur = false;
@@ -124,24 +127,27 @@ class _MyProfileViewState extends State<MyProfileView> {
                 sectionLogo: section.sectionLogo,
                 onTap: () {
                   if (section.title.trim() == "Auto-Entrepreneur") {
-                    final alertInfosModel = isAutoEntrepreneur ?
-                    AlertInfosModel(
-                      imagePath: "assets/icons/briefcase.svg",
-                      title: 'Auto-Entrepreneur',
-                      description:
-                      "Congratulations! Your Auto-Entrepreneur profile has been successfully verified.",
-                      buttonList: [{"title":"Go Back","color":Color(0XFF1C9F80)}]  ,
-                      alertColor: Color(0XFF1C9F80),
-                    )
-                        :
-                    AlertInfosModel(
-                      imagePath: "assets/icons/briefcase.svg",
-                      title: 'Auto-Entrepreneur',
-                      description:
-                      "In order to apply you should have the auto-entrepreneur card as it is required for the application",
-                      buttonList: [{"title":"Go Back","color":Color(0XFFF0A14A)}] ,
-                      alertColor: Color(0XFFF0A14A),
-                    );
+                    final alertInfosModel = isAutoEntrepreneur
+                        ? AlertInfosModel(
+                            imagePath: "assets/icons/briefcase.svg",
+                            title: 'Auto-Entrepreneur',
+                            description:
+                                "Congratulations! Your Auto-Entrepreneur profile has been successfully verified.",
+                            buttonList: [
+                              {"title": "Go Back", "color": Color(0XFF1C9F80)},
+                            ],
+                            alertColor: Color(0XFF1C9F80),
+                          )
+                        : AlertInfosModel(
+                            imagePath: "assets/icons/briefcase.svg",
+                            title: 'Auto-Entrepreneur',
+                            description:
+                                "In order to apply you should have the auto-entrepreneur card as it is required for the application",
+                            buttonList: [
+                              {"title": "Go Back", "color": Color(0XFFF0A14A)},
+                            ],
+                            alertColor: Color(0XFFF0A14A),
+                          );
                     return _showDialog(context, alertInfosModel);
                   } else {
                     Navigator.push(
@@ -161,7 +167,9 @@ class _MyProfileViewState extends State<MyProfileView> {
                 Expanded(
                   flex: 2,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _handleLogout(context, ref);
+                    },
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     hoverColor: Colors.transparent,
@@ -196,7 +204,17 @@ class _MyProfileViewState extends State<MyProfileView> {
                   flex: 3,
                   child: InkWell(
                     onTap: () {
-                      final alertInfosModel =AlertInfosModel(imagePath: "assets/icons/info.svg", title: "Delete Account", description: "This action cannot be undone. All your data will be permanently removed.", buttonList: [{"title":"Cancel","color":Color(0x669192A3)} ,{"title":"Confirm","color":Color(0XFFFFC100)}  ], alertColor: Color(0XFFFFC100));
+                      final alertInfosModel = AlertInfosModel(
+                        imagePath: "assets/icons/info.svg",
+                        title: "Delete Account",
+                        description:
+                            "This action cannot be undone. All your data will be permanently removed.",
+                        buttonList: [
+                          {"title": "Cancel", "color": Color(0x669192A3)},
+                          {"title": "Confirm", "color": Color(0XFFFFC100)},
+                        ],
+                        alertColor: Color(0XFFFFC100),
+                      );
                       _showDialog(context, alertInfosModel);
                     },
                     splashColor: Colors.transparent,
@@ -330,9 +348,40 @@ class _MyProfileViewState extends State<MyProfileView> {
       ),
     );
   }
+
+  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
+    final alertInfosModel = AlertInfosModel(
+      imagePath: "assets/icons/info.svg",
+      title: "Log Out",
+      description:
+          "Are you Sure you want to Logout. you will have to re-enter your phone number",
+      buttonList: [
+        {"title": "Cancel", "color": Color(0x669192A3), "onPressed": null},
+        {
+          "title": "Confirm",
+          "color": Color(0XFFFFC100),
+          "onPressed": () async {
+            await ref.read(authStateProvider.notifier).logout();
+
+            if (!context.mounted) return;
+
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+              (route) => false,
+            );
+
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Logged out')));
+          },
+        },
+      ],
+      alertColor: Color(0XFFFFC100),
+    );
+    _showDialog(context, alertInfosModel);
+  }
 }
-
-
 
 void _showDialog(BuildContext context, AlertInfosModel alertInfosModel) {
   showDialog(
